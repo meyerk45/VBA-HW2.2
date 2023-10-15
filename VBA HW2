@@ -1,0 +1,40 @@
+VBA HW2--REad Me
+
+'Add a column for the Ticker Symbol
+    used Credit Card example looping code: 
+        If Cells(i + 1, column).Value <>Cells(i, column).Value Then
+
+'Yearly change from the opening price at the beginning of a given year to the closing price 
+at the end of the year
+    Used example from the Census Bonus. Looped through the data to find the yearly change, percent change and total stock volume with this code:
+        YearlyChange = ClosingPrice - OpeningPrice
+
+'the percentabe change from the opening price at the beginning of a give year
+to the closing price at the end of that year
+    Used google to find the percent change formula. https://www.statology.org/vba-percentage-format/
+    PercentChange = (YearlyChange / OpeningPrice) * 100
+
+'The total stock volume of the stock. The result should match the included image
+    Used Total equation from the Census exercise Pt1
+    TotalStockVolume = TotalStockVolume + ws.Cells(1 + 7).Value
+
+Add functionality to script to return the stock with the "Greatest % increase", "Greatest % decrease", and 
+"Greatest total volume". The solution should match the included image.
+    Used the BudgetChecker exercise for the If/ElseIf loop to find the greatest % increase, decrease and greatest total volume:
+        If percentchange > MaxpercenIncrease then
+            Maxpercentincrease = percentchange
+            tickermaxincrease = Ticker
+    
+    Used the Lotto Winner assignment to find how to retrieve certain values and show/print in another area:
+        ws.Cells(2, 16).Value = "Greatest % Increase"
+
+Make sure to use conditional formatting that will highlight positive change in green
+and negative change in red
+    Conditional formating formulas found in the grading group exercise.
+        If YearlyChange >= 0 Then
+            ws.Cells(SummaryRow, 10).Interior.ColorIndex = 4
+        Else...
+
+In addition to the above inclass exercises, I was in office hours and watched another student receive help from the instructor via zoom and saw how his code was laid out, the student's name is Jorge. I used his lay out to help shape my format, in terms of how to group the work. For example how Jorge started his assignment with declaring the integers alltogether at the beginning, helped me because I was declaring my integers as I was needing them and it was really very messy.  So the layout of my solution is based on how Jorge shared his homework during office hours from last Thursday 10/12/2023.
+
+
