@@ -1,0 +1,126 @@
+VERSION 1.0 CLASS
+BEGIN
+  MultiUse = -1  'True
+END
+Attribute VB_Name = "ThisWorkbook"
+Attribute VB_GlobalNameSpace = False
+Attribute VB_Creatable = False
+Attribute VB_PredeclaredId = True
+Attribute VB_Exposed = True
+Sub VBA_HW2()
+
+    'Set and Declare Variables
+    Dim ws As Worksheet
+    Dim LastRow As Long
+    Dim Ticker As String
+    Dim YearlyChange As Double
+    Dim PercentChange As Double
+    Dim TotalVolume As Double
+    Dim OpeningPrice As Double
+    Dim ClosingPrice As Double
+    Dim SummaryRow As Long
+    Dim MaxPercentIncrease As Double
+    Dim MaxPercentDecrease As Double
+    Dim MaxTotalVolume As Double
+    Dim TickerMaxIncrease As String
+    Dim TickerMaxDecrease As String
+    Dim TickerMaxVolume As String
+    
+        'Loop through all stocks for one year
+        For Each ws In Worksheets
+            WorksheetName = ws.Name
+            SummaryRow = 2
+            TotalVolume = 0
+            LastRow = ws.Cells(Rows.Count, 1).End(xlUp).Row
+            MaxPercentIncrease = 0
+            MaxPercentDecrease = 0
+            GreatestVolume = 0
+
+        'Create the column headers
+        ws.Cells(1, 9).Value = "Ticker"
+        ws.Cells(1, 10).Value = "Yearly Change"
+        ws.Cells(1, 11).Value = "Percent Change"
+        ws.Cells(1, 12).Value = "Total Stock Volume"
+        
+        'Loop through each row
+        For i = 2 To LastRow
+            Ticker = ws.Cells(i, 1).Value
+            If ws.Cells(i, 1).Value <> ws.Cells(i + 1, 1).Value Then
+            
+                'Calculate yearly change, percent change and total stock volue
+                ClosingPrice = ws.Cells(i, 6).Value
+                YearlyChange = ClosingPrice - OpeningPrice
+                
+                If OpeningPrice = 0 Then
+                    PercentChange = 0
+                    
+                Else
+                    PercentChange = (YearlyChange / OpeningPrice) * 100
+                    
+                End If
+                    TotalStockVolume = TotalStockVolume + ws.Cells(i, 7).Value
+                    
+                'Print the results to the summary table on the current worksheet
+                ws.Cells(SummaryRow, 9).Value = Ticker
+                ws.Cells(SummaryRow, 10).Value = YearlyChange
+                ws.Cells(SummaryRow, 11).Value = PercentChange
+                ws.Cells(SummaryRow, 12).Value = TotalStockVolume
+                
+                'Color code Yearly Change cell based on positive or negative value
+                If YearlyChange >= 0 Then
+                    ws.Cells(SummaryRow, 10).Interior.ColorIndex = 4
+                    
+                Else
+                    ws.Cells(SummaryRow, 10).Interior.ColorIndex = 3
+                    
+                End If
+                
+                'Update greatest values
+                If PercentChange > MaxPercentIncrease Then
+                    MaxPercentIncrease = PercentChange
+                    TickerMaxIncrease = Ticker
+                End If
+                
+                If PercentChange < MaxPercentDecrease Then
+                    MaxPercentDecrease = PercentChange
+                    TickerMaxDecrease = Ticker
+                End If
+                
+                If TotalStockVolume > MaxTotalVolume Then
+                    MaxTotalVolume = TotalStockVolume
+                    TickerMaxVolume = Ticker
+                End If
+                
+                'Reset variables for the next stock
+                OpeningPrice = ws.Cells(i + 1, 3).Value
+                YearlyChange = 0
+                PercentChange = 0
+                TotalVolume = 0
+                SummaryRow = SummaryRow + 1
+                
+                ElseIf OpeningPrice = 0 Then
+                OpeningPrice = ws.Cells(i, 3).Value
+                
+                End If
+                
+            Next i
+            
+            'Print greatest values
+            ws.Cells(2, 16).Value = "Greatest % Increase"
+            ws.Cells(3, 16).Value = "Greatest % Decrease"
+            ws.Cells(4, 16).Value = "Greatest Total Volume"
+            
+            ws.Cells(2, 17).Value = TickerMaxIncrease
+            ws.Cells(3, 17).Value = TickerMaxDecrease
+            ws.Cells(4, 17).Value = TickerMaxVolume
+            
+            ws.Cells(2, 18).Value = MaxPercentIncrease
+            ws.Cells(3, 18).Value = MaxPercentDecrease
+            ws.Cells(4, 18).Value = MaxTotalVolume
+            
+            'Auto fit new columns
+            Columns("I:R").AutoFit
+            
+        Next ws
+
+End Sub
